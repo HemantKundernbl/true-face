@@ -13,11 +13,11 @@ const Header = () => {
 	return (
 		<div className="bg-black w-full my-0 mx-auto text-trueface_text ">
 			<div className="w-[80%] my-0 mx-auto flex justify-between py-3 flex justify-center items-center">
-				<span className="uppercase font-logo text-xl text-white ">
+				<Link className="uppercase font-logo text-xl text-white " href="/">
 					True Face
-				</span>
+				</Link>
 
-				<div className="flex justify-center items-center gap-10">
+				<div className="hidden justify-center items-center gap-10 lg:flex">
 					{links.map((link) => {
 						return (
 							<Link key={link.label} href={link.path} className="">
@@ -32,7 +32,7 @@ const Header = () => {
 					})}
 				</div>
 
-				<button className="uppercase rounded-md bg-cta px-5 py-2 text-sm font-medium">
+				<button className="hidden lg:block uppercase rounded-md bg-cta px-5 py-2 text-sm font-medium">
 					Contact Us
 				</button>
 				<>

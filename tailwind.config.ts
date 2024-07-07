@@ -7,6 +7,13 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',  // Medium screens and above
+      'lg': '1024px', // Large screens and above
+      'xl': '1280px', // Extra large screens and above
+      '2xl': '1536px',// 2X extra large screens and above
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

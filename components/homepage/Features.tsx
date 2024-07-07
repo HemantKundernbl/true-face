@@ -28,22 +28,22 @@ const Features = () => {
 	return (
 		<div className="my-[10%]">
 			<div className="flex flex-col items-center gap-2 text-center">
-				<p className="text-[22px] text-subtext font-medium">
+				<p className="text-[15px] md:text-[22px] text-subtext font-medium">
 					Your Security, Your Convenience
 				</p>
-				<h2 className="text-[49px] font-bold text-trueface_text text-center">
-					Facial{" "}
+				<h2 className="text-[30px] md:text-[49px] font-bold text-trueface_text text-center">
+					Facial
 					<span className="underline decoration-wavy decoration-8 decoration-cta">
 						Recognition <br />
-					</span>{" "}
+					</span>
 					That Works With
 				</h2>
-				<small className="text-subtext text-[14px] font-medium leading-6">
+				<small className="text-subtext text-[10px] md:text-[14px] font-medium leading-6">
 					Our cutting-edge facial recognition technology seamlessly <br />
 					integrates with a wide range of applications and industries.
 				</small>
 			</div>
-			<div className="grid grid-cols-4 gap-5 mt-[5%]">
+			<div className="grid grid-cols-1  md:grid-cols-4 gap-5 mt-[5%] ">
 				{features.map((feature) => {
 					return (
 						<div
@@ -56,10 +56,10 @@ const Features = () => {
 								width={500}
 								height={500}
 							/>
-							<small className="text-[20px] font-bold text-trueface_text">
+							<small className="text-[15px] md:text-[20px] font-bold text-trueface_text">
 								{feature.range}
 							</small>
-							<p className="text-subtext text-[17px] font-medium">
+							<p className="text-subtext text-12px md:text-[17px] font-medium">
 								{feature.text}
 							</p>
 						</div>

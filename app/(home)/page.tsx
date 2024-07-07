@@ -1,3 +1,5 @@
+"use client";
+
 import Experience from "@/components/homepage/Experience";
 import Features from "@/components/homepage/Features";
 import Hero from "@/components/homepage/Hero";

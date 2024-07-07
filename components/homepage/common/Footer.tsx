@@ -92,7 +92,7 @@ const footer_links = [
 const Footer = () => {
 	return (
 		<div className="bg-[#171E26] px-10 py-16">
-			<div className="flex items-start justify-between gap-20 w-[80%] my-0 mx-auto ">
+			<div className="flex flex-col items-start justify-between gap-20 w-[80%] my-0 mx-auto md:flex-row ">
 				{organization_details.map((details) => {
 					return (
 						<div key={details.title} className="flex flex-col gap-5">
@@ -114,7 +114,7 @@ const Footer = () => {
 						</div>
 					);
 				})}
-				<div className="grid grid-cols-3 gap-20">
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
 					{footer_links.map((links) => {
 						return (
 							<div key={links.title}>

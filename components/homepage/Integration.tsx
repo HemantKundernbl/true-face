@@ -4,7 +4,7 @@ import React from "react";
 const Integration = () => {
 	return (
 		<div className="mb-[10%]">
-			<div className="flex gap-20 justify-center items-center">
+			<div className="flex flex-col gap-20 justify-center items-center md:flex-row">
 				<div className="flex-1 ">
 					<h2 className="font-bold text-[35px] text-trueface_text">
 						<span className="underline  decoration-8 decoration-cta mr-2">
@@ -27,7 +27,7 @@ const Integration = () => {
 					/>
 				</div>
 			</div>
-			<div className="flex flex-row-reverse gap-20 justify-center items-center mt-20">
+			<div className="flex flex-col md:flex-row md:flex-row-reverse gap-20 justify-center items-center mt-20">
 				<div className="flex-1 ">
 					<h2 className="font-bold text-[35px] text-trueface_text">
 						<span className="underline  decoration-8 decoration-cta mr-2">
