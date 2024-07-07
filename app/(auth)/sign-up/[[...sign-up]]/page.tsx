@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
-import { SignIn, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import { SignUp, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 
 export default function Page() {
 	return (
@@ -14,7 +14,7 @@ export default function Page() {
 				</div>
 				<div className="flex justify-center items-center mt-8">
 					<ClerkLoaded>
-						<SignIn />
+						<SignUp />
 					</ClerkLoaded>
 					<ClerkLoading>
 						<Loader2 className="animate-spin text-muted-foreground" />

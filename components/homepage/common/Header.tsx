@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
 
 const Header = () => {
 	const links = [
@@ -10,7 +11,7 @@ const Header = () => {
 	];
 
 	return (
-		<div className="bg-black w-full my-0 mx-auto  absolute top-12 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-trueface_text ">
+		<div className="bg-black w-full my-0 mx-auto text-trueface_text ">
 			<div className="w-[80%] my-0 mx-auto flex justify-between py-3 flex justify-center items-center">
 				<span className="uppercase font-logo text-xl text-white ">
 					True Face
@@ -34,6 +35,14 @@ const Header = () => {
 				<button className="uppercase rounded-md bg-cta px-5 py-2 text-sm font-medium">
 					Contact Us
 				</button>
+				<>
+					<ClerkLoaded>
+						<UserButton />
+					</ClerkLoaded>
+					<ClerkLoading>
+						<span className="size-7 rounded-full bg-slate-600" />
+					</ClerkLoading>
+				</>
 			</div>
 		</div>
 	);

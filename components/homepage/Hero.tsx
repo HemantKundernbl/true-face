@@ -5,6 +5,16 @@ import React from "react";
 const Hero = () => {
 	return (
 		<div className="w-full min-h-screen flex justify-between items-center relative">
+			<video
+				className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
+				autoPlay
+				muted
+				loop
+			>
+				<source src="hero-video2.mp4" type="video/mp4" />
+				Your browser does not support the video tag.
+			</video>
+			<div className="video-overlay"></div>
 			<div className="w-auto my-0 mx-auto text-trueface_text h-full flex flex-col justify-center items-center text-center gap-5">
 				<h1 className="font-extrabold text-6xl leading-[1.2]">
 					Verify{" "}
@@ -21,10 +31,10 @@ const Hero = () => {
 				<Link
 					href="/app"
 					target="_blank"
-					className="bg-cta  flex justify-center items-center gap-2 uppercase rounded-lg font-semibold text-sm px-8 py-3  outline outline-8 outline-cta_outline mt-4
+					className="button-49
         "
 				>
-					try now <Play fill="#fff" size={16} />
+					try now
 				</Link>
 			</div>
 			<Mouse

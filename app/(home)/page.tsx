@@ -8,13 +8,15 @@ import Image from "next/image";
 
 export default function Home() {
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between w-[80%] my-0 mx-auto">
+		<main className="flex min-h-screen flex-col items-center justify-between w-[100%] my-0 mx-auto">
 			<Hero />
-			<Metrics />
-			<Features />
-			<Experience />
-			<Security />
-			<Integration />
+			<div className="w-[80%] my-0 mx-auto">
+				<Metrics />
+				<Features />
+				<Experience />
+				<Security />
+				<Integration />
+			</div>
 		</main>
 	);
 }
