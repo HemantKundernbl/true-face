@@ -13,7 +13,7 @@ const DropZone: React.FC<DropZoneProps> = ({ onImageDrop, loading }) => {
 	const [image, setImage] = useState<string | null>(null);
 
 	const { getRootProps, getInputProps } = useDropzone({
-		accept: ["image/*"],
+		accept: "image/*" as any,
 		onDrop: (acceptedFiles: File[]) => {
 			const file = acceptedFiles[0];
 			const reader = new FileReader();
