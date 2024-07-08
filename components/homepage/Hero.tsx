@@ -17,7 +17,7 @@ const Hero = () => {
 			<div className="video-overlay"></div>
 			<div className="w-auto my-0 mx-auto text-trueface_text h-full flex flex-col justify-center items-center text-center gap-5">
 				<h1 className="font-extrabold text-3xl md:text-6xl leading-[1.2]">
-					Verify
+					Verify{" "}
 					<span className="bg-gradient-to-l from-[#FA70D3] to-[#9D27FB] bg-clip-text text-transparent">
 						8 Billion+
 					</span>
