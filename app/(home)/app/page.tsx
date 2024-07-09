@@ -5,29 +5,22 @@ import { useDropzone } from "react-dropzone";
 import axios from "axios";
 
 interface DropZoneProps {
-	onImageDrop: (base64: string) => void;
+	onImageDrop: (file: File) => void;
 	loading: boolean;
+	preview: string | null;
 }
 
-const DropZone: React.FC<DropZoneProps> = ({ onImageDrop, loading }) => {
-	const [image, setImage] = useState<string | null>(null);
-
+const DropZone: React.FC<DropZoneProps> = ({
+	onImageDrop,
+	loading,
+	preview,
+}) => {
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: "image/*" as any,
 		onDrop: (acceptedFiles: File[]) => {
 			const file = acceptedFiles[0];
-			const reader = new FileReader();
-			reader.onload = (event: ProgressEvent<FileReader>) => {
-				if (event.target && event.target.result) {
-					let base64 = event.target.result as string;
-					if (base64.startsWith("data:image/")) {
-						base64 = base64.split(",")[1];
-					}
-					setImage(base64);
-					onImageDrop(base64);
-				}
-			};
-			reader.readAsDataURL(file);
+			const previewUrl = URL.createObjectURL(file);
+			onImageDrop(file);
 		},
 	});
 
@@ -49,18 +42,16 @@ const DropZone: React.FC<DropZoneProps> = ({ onImageDrop, loading }) => {
 				<source src="/scan2.mp4" type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
-			{image ? (
+			{preview ? (
 				<img
-					src={`data:image/jpeg;base64,${image}`}
+					src={preview}
 					alt="Dropped"
 					className="absolute inset-0 w-full h-full object-contain rounded-lg"
 				/>
 			) : (
-				<>
-					<div className="w-full h-32 flex justify-center items-center bg-gray-800 rounded-lg text-gray-400 text-center">
-						Drag & Drop Image Here
-					</div>
-				</>
+				<div className="w-full h-32 flex justify-center items-center bg-gray-800 rounded-lg text-gray-400 text-center">
+					Drag & Drop Image Here
+				</div>
 			)}
 		</div>
 	);
@@ -93,19 +84,36 @@ const Modal: React.FC<{ message: string; onClose: () => void }> = ({
 };
 
 const Page: React.FC = () => {
-	const [selfie, setSelfie] = useState<string | null>(null);
-	const [frame, setFrame] = useState<string | null>(null);
+	const [selfie, setSelfie] = useState<File | null>(null);
+	const [frame, setFrame] = useState<File | null>(null);
+	const [previewSelfie, setPreviewSelfie] = useState<string | null>(null);
+	const [previewFrame, setPreviewFrame] = useState<string | null>(null);
 	const [modalMessage, setModalMessage] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
+	const [model, setModel] = useState<string>("ArcFace");
+	const [activeTab, setActiveTab] = useState<string>("verification");
+	const [analysisResult, setAnalysisResult] = useState<any>(null);
+	const [analyzeImage, setAnalyzeImage] = useState<File | null>(null);
+	const [previewAnalyze, setPreviewAnalyze] = useState<string | null>(null);
 
 	const handleMatch = async () => {
 		if (selfie && frame) {
 			setLoading(true);
 			try {
-				const response = await axios.post("http://127.0.0.1:8000/verify", {
-					selfie,
-					frame,
-				});
+				const formData = new FormData();
+				formData.append("selfie", selfie);
+				formData.append("frame", frame);
+				formData.append("model", model);
+
+				const response = await axios.post(
+					"http://127.0.0.1:8000/verify",
+					formData,
+					{
+						headers: {
+							"Content-Type": "multipart/form-data",
+						},
+					}
+				);
 				const result = response.data;
 				setLoading(false);
 				if (result["verified"]) {
@@ -115,7 +123,7 @@ const Page: React.FC = () => {
 				}
 			} catch (error) {
 				console.error("Error matching faces:", error);
-				setModalMessage("something went wrong please try again!");
+				setModalMessage("Something went wrong, please try again!");
 				setLoading(false);
 			}
 		} else {
@@ -123,30 +131,149 @@ const Page: React.FC = () => {
 		}
 	};
 
+	const handleAnalyze = async () => {
+		if (analyzeImage) {
+			setLoading(true);
+			try {
+				const formData = new FormData();
+				formData.append("image", analyzeImage);
+
+				const response = await axios.post(
+					"http://127.0.0.1:8000/analyze",
+					formData,
+					{
+						headers: {
+							"Content-Type": "multipart/form-data",
+						},
+					}
+				);
+				const result = response.data;
+				setLoading(false);
+				setAnalysisResult(result);
+			} catch (error) {
+				console.error("Error analyzing image:", error);
+				setLoading(false);
+			}
+		} else {
+			alert("Please upload an image for analysis.");
+		}
+	};
+
 	return (
-		<div className="min-h-screen bg-[#12161E] flex justify-center items-center">
+		<div className="min-h-screen bg-[#12161E] flex flex-col justify-center items-center">
 			<div className="w-[80%] my-0 mx-auto">
-				<h1 className="text-slate-400 text-2xl font-medium mb-8 text-center">
+				{/* <h1 className="text-slate-400 text-2xl font-medium mb-8 text-center">
 					Verify Your True Identity with True Face
-				</h1>
-				<div className="w-full max-w-4xl flex flex-col md:flex-row justify-between items-center gap-8 mx-auto mt-[60px]">
-					{/* Drop Zone 1 */}
-					<DropZone onImageDrop={setSelfie} loading={loading} />
-
-					{/* Text and Button */}
-					<div className="text-center text-white md:mx-8">
-						<button
-							onClick={handleMatch}
-							className="bg-gradient-to-r from-[#FA70D3] to-[#9D27FB] text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-8"
-							disabled={loading}
-						>
-							{loading ? "...loading" : "Match"}
-						</button>
-					</div>
-
-					{/* Drop Zone 2 */}
-					<DropZone onImageDrop={setFrame} loading={loading} />
+				</h1> */}
+				<div className="flex justify-center mb-8 mt-8">
+					<button
+						onClick={() => setActiveTab("verification")}
+						className={`px-4 py-2 rounded-l-lg ${
+							activeTab === "verification"
+								? "bg-gray-800 text-white"
+								: "bg-gray-600 text-gray-400"
+						}`}
+					>
+						Verification
+					</button>
+					<button
+						onClick={() => setActiveTab("analyze")}
+						className={`px-4 py-2 rounded-r-lg ${
+							activeTab === "analyze"
+								? "bg-gray-800 text-white"
+								: "bg-gray-600 text-gray-400"
+						}`}
+					>
+						Analyze
+					</button>
 				</div>
+				{activeTab === "verification" && (
+					<div className="w-full max-w-4xl flex flex-col md:flex-row justify-between items-center gap-8 mx-auto mt-[60px]">
+						{/* Drop Zone 1 */}
+						<DropZone
+							onImageDrop={(file) => {
+								setSelfie(file);
+								setPreviewSelfie(URL.createObjectURL(file));
+							}}
+							loading={loading}
+							preview={previewSelfie}
+						/>
+
+						{/* Text and Button */}
+						<div className="text-center text-white md:mx-8">
+							<div className="mb-4">
+								<label htmlFor="model" className="block mb-2">
+									Select Model
+								</label>
+								<select
+									id="model"
+									value={model}
+									onChange={(e) => setModel(e.target.value)}
+									className="bg-gray-800 text-white rounded-lg py-2 px-4"
+								>
+									<option value="VGG-Face">VGG-Face</option>
+									<option value="Facenet">Facenet</option>
+									<option value="Facenet512">Facenet512</option>
+									<option value="OpenFace">OpenFace</option>
+									<option value="ArcFace">ArcFace</option>
+								</select>
+							</div>
+							<button
+								onClick={handleMatch}
+								className="bg-gradient-to-r from-[#FA70D3] to-[#9D27FB] text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-8"
+								disabled={loading}
+							>
+								{loading ? "...loading" : "Match"}
+							</button>
+						</div>
+
+						{/* Drop Zone 2 */}
+						<DropZone
+							onImageDrop={(file) => {
+								setFrame(file);
+								setPreviewFrame(URL.createObjectURL(file));
+							}}
+							loading={loading}
+							preview={previewFrame}
+						/>
+					</div>
+				)}
+				{activeTab === "analyze" && (
+					<div className="w-full max-w-4xl flex flex-col justify-center items-center gap-8 mx-auto mt-[60px]">
+						{/* Drop Zone for Analyze */}
+						<DropZone
+							onImageDrop={(file) => {
+								setAnalyzeImage(file);
+								setPreviewAnalyze(URL.createObjectURL(file));
+							}}
+							loading={loading}
+							preview={previewAnalyze}
+						/>
+
+						{/* Analyze Button */}
+						<div className="text-center text-white">
+							<button
+								onClick={handleAnalyze}
+								className="bg-gradient-to-r from-[#FA70D3] to-[#9D27FB] text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-8"
+								disabled={loading}
+							>
+								{loading ? "...loading" : "Analyze"}
+							</button>
+						</div>
+
+						{/* Analysis Results */}
+						{analysisResult && (
+							<div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg mt-8 w-full">
+								<h2 className="text-2xl font-semibold mb-4">
+									Analysis Results
+								</h2>
+								<pre className="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+									{JSON.stringify(analysisResult, null, 2)}
+								</pre>
+							</div>
+						)}
+					</div>
+				)}
 				{modalMessage && (
 					<Modal message={modalMessage} onClose={() => setModalMessage(null)} />
 				)}
