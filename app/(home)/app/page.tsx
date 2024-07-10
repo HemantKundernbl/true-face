@@ -49,7 +49,7 @@ const DropZone: React.FC<DropZoneProps> = ({
 					className="absolute inset-0 w-full h-full object-contain rounded-lg"
 				/>
 			) : (
-				<div className="w-full h-32 flex justify-center items-center bg-gray-800 rounded-lg text-gray-400 text-center">
+				<div className="w-full h-32 flex justify-center items-center bg-gray-900 rounded-lg text-gray-400 text-center">
 					Drag & Drop Image Here
 				</div>
 			)}
@@ -160,7 +160,7 @@ const Page: React.FC = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-[#12161E] flex flex-col justify-center items-center">
+		<div className="min-h-screen bg-[#12161E] flex flex-col justify-center items-center pt-10 pb-20 ">
 			<div className="w-[80%] my-0 mx-auto">
 				{/* <h1 className="text-slate-400 text-2xl font-medium mb-8 text-center">
 					Verify Your True Identity with True Face
@@ -223,7 +223,7 @@ const Page: React.FC = () => {
 								className="bg-gradient-to-r from-[#FA70D3] to-[#9D27FB] text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-8"
 								disabled={loading}
 							>
-								{loading ? "...loading" : "Match"}
+								{loading ? "...loading" : "Verify"}
 							</button>
 						</div>
 
@@ -254,7 +254,7 @@ const Page: React.FC = () => {
 						<div className="text-center text-white">
 							<button
 								onClick={handleAnalyze}
-								className="bg-gradient-to-r from-[#FA70D3] to-[#9D27FB] text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-8"
+								className="bg-gradient-to-r from-[#FA70D3] to-[#9D27FB] text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-8 mb-12"
 								disabled={loading}
 							>
 								{loading ? "...loading" : "Analyze"}
@@ -264,12 +264,41 @@ const Page: React.FC = () => {
 						{/* Analysis Results */}
 						{analysisResult && (
 							<div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg mt-8 w-full">
-								<h2 className="text-2xl font-semibold mb-4">
-									Analysis Results
-								</h2>
-								<pre className="bg-gray-700 p-4 rounded-lg overflow-x-auto">
-									{JSON.stringify(analysisResult, null, 2)}
-								</pre>
+								{loading ? (
+									"...processing"
+								) : (
+									<>
+										<h2 className="text-2xl font-semibold mb-4">
+											Analysis Results
+										</h2>
+										<ul className="bg-gray-700 p-4 rounded-lg overflow-x-auto flex flex-col gap-2 text-xl capitalize">
+											<li>
+												Emotion:
+												<span className="ml-2 text-green-500 ">
+													{analysisResult[0].dominant_emotion}
+												</span>
+											</li>
+											<li>
+												Age
+												<span className="ml-2 text-green-500 ">
+													{analysisResult[0].age}
+												</span>
+											</li>
+											<li>
+												Gender:
+												<span className="ml-2 text-green-500 ">
+													{analysisResult[0].dominant_gender}
+												</span>
+											</li>
+											<li>
+												Race:
+												<span className="ml-2 text-green-500 ">
+													{analysisResult[0].dominant_race}
+												</span>
+											</li>
+										</ul>
+									</>
+								)}
 							</div>
 						)}
 					</div>
