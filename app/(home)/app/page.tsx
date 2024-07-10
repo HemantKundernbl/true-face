@@ -275,25 +275,25 @@ const Page: React.FC = () => {
 											<li>
 												Emotion:
 												<span className="ml-2 text-green-500 ">
-													{analysisResult[0].dominant_emotion}
+													{analysisResult[0]?.dominant_emotion}
 												</span>
 											</li>
 											<li>
 												Age
 												<span className="ml-2 text-green-500 ">
-													{analysisResult[0].age}
+													{analysisResult[0]?.age}
 												</span>
 											</li>
 											<li>
 												Gender:
 												<span className="ml-2 text-green-500 ">
-													{analysisResult[0].dominant_gender}
+													{analysisResult[0]?.dominant_gender}
 												</span>
 											</li>
 											<li>
 												Race:
 												<span className="ml-2 text-green-500 ">
-													{analysisResult[0].dominant_race}
+													{analysisResult[0]?.dominant_race}
 												</span>
 											</li>
 										</ul>
